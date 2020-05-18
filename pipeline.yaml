@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
     GithubRepo:
       Type: "String"
-      Default: "dortega-divilo/poc-backend-deploy.git"
+      Default: "poc-backend-deploy.git"
     GithubToken:
       Type: "String"
       NoEcho: true
