@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
     GithubRepo:
       Type: "String"
-      Default: "https://github.com/dortega-divilo/poc-backend-deploy.git"
+      Default: "dortega-divilo/poc-backend-deploy.git"
     GithubToken:
       Type: "String"
       NoEcho: true
@@ -23,7 +23,6 @@ Resources:
     # CodeBuild project and resources (S3 Bucket for build artifacts, Role, Project)
     BuildArtifactsBucket:
         Type: AWS::S3::Bucket
-        Properties:
         DeletionPolicy: Retain
 
 ########  ##     ## #### ##       ########  
