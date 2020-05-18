@@ -5,7 +5,6 @@ Parameters:
       Default: "poc-backend-deploy.git"
     GithubToken:
       Type: "String"
-      NoEcho: true
       Default: "11b47924f6ae57a13e4defac7d4e916aa16f593f"
     GithubUser:
       Type: "String"
@@ -76,7 +75,6 @@ Resources:
                   Actions:
                     - Name: SourceCodeRepo
                       ActionTypeId:
-                      # More info on Possible Values: https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements
                         Category: Source
                         Owner: ThirdParty
                         Provider: GitHub
