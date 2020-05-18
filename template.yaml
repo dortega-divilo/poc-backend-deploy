@@ -1,0 +1,145 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: base-service
+    Description: Base SAM application for multiple Lambda Functions
+    Author: dortega
+    SemanticVersion: 0.0.1
+Globals:
+  Function:
+    Environment:
+      Variables:
+        Region: 'eu-west-1'
+        DynamoDbEndpoint: 'http://localhost:8000'
+    CodeUri: s3://divilo-sam-artifacts/poc-sam-deploy
+Resources:
+  APIGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: base-service
+      EndpointConfiguration: EDGE
+      StageName: DEV
+  FunctionCreate:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: base-service-create
+      Handler: create.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBFullAccess
+      MemorySize: 128
+      Timeout: 300
+      CodeUri: function-create/
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: post
+            RestApiId:
+              Ref: APIGatewayApi
+  FunctionRetrieve:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: base-service-retrieve
+      Handler: retrieve.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBFullAccess
+      MemorySize: 128
+      Timeout: 300
+      CodeUri: function-retrieve/
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+            RestApiId:
+              Ref: APIGatewayApi
+  FunctionRetrieveById:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: base-service-retrieve-by-id
+      Handler: retrieve-by-id.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBFullAccess
+      MemorySize: 128
+      Timeout: 300
+      CodeUri: function-retrieve-by-id/
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /{id}
+            Method: get
+            RestApiId:
+              Ref: APIGatewayApi
+  FunctionUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: base-service-update
+      Handler: update.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBFullAccess
+      MemorySize: 128
+      Timeout: 300
+      CodeUri: function-update/
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: put
+            RestApiId:
+              Ref: APIGatewayApi
+  FunctionDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: base-service-delete
+      Handler: delete.handler
+      Runtime: nodejs12.x
+      Policies: AmazonDynamoDBFullAccess
+      MemorySize: 128
+      Timeout: 300
+      CodeUri: function-delete/
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /{id}
+            Method: delete
+            RestApiId:
+              Ref: APIGatewayApi
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: base-service-table
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+Outputs:
+  FunctionCreate:
+    Description: "Create Lambda Function ARN"
+    Value: !GetAtt FunctionCreate.Arn
+  FunctionRetrieve:
+    Description: "Retrieve Lambda Function ARN"
+    Value: !GetAtt FunctionRetrieve.Arn
+  FunctionRetrieve:
+    Description: "Retrieve By Id Lambda Function ARN"
+    Value: !GetAtt FunctionRetrieve.Arn
+  FunctionUpdate:
+    Description: "Update Lambda Function ARN"
+    Value: !GetAtt FunctionUpdate.Arn
+  FunctionDelete:
+    Description: "Delete Lambda Function ARN"
+    Value: !GetAtt FunctionDelete.Arn
+  DynamoDBTable:
+    Description: "DynamoDB Table ARN"
+    Value: !GetAtt DynamoDBTable.Arn

@@ -1,0 +1,16 @@
+{
+  "name": "package.json",
+  "version": "0.0.1",
+  "description": "## Implements Lambdas, API Gateway, and DynamoDB",
+  "dependencies": {
+    "uuid": "^8.0.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.673.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": ""
+}
